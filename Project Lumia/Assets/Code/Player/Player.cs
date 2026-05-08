@@ -19,7 +19,6 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-
         extraJumps = extraJumpsValue;
     }
 
@@ -27,10 +26,10 @@ public class Player : MonoBehaviour
     void Update()
     {
         // Moves the player whenever A or D is pressed
-        float moveInput = Input.GetAxis("Horizontal");
+        float moveInput = Input.GetAxisRaw("Horizontal");
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocityY);
 
-        // Makes the player jump when space is pressed
+        // Makes the player jump when space is pressed, and double jump when pressed again
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if(isGrounded)
@@ -49,7 +48,23 @@ public class Player : MonoBehaviour
             extraJumps = extraJumpsValue;
         }
 
+
         SetAnimation(moveInput);
+
+        //TEST
+
+        if (moveInput != 0)
+        {
+            rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+        }
+        else
+        {
+            // STOP HERE: No key is pressed
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+            // Use Vector2.zero if you want to stop vertical movement too
+        }
+        //TEST
+
     }
     // Checks for ground
     private void FixedUpdate()
@@ -83,4 +98,6 @@ public class Player : MonoBehaviour
             }
         }
     }
+
+
 }
